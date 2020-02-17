@@ -1,0 +1,303 @@
+package main
+
+import (
+	"fmt"
+)
+
+const A = 1000
+
+type pegawai struct {
+	kode     int
+	nama     string
+	golongan int
+	umur     int
+	alamat   string
+	reward   string
+}
+
+type absensi struct {
+	masuk  int
+	keluar int
+	lembur string
+}
+
+type array2 [A]absensi
+type array1 [A]pegawai
+
+var data array1
+var absen array2
+
+func main() {
+	var pilihan int
+	banyak := 0
+	i := ""
+	fmt.Print("Hidupkan program?(ya/tidak) : ")
+	fmt.Scan(&i)
+	for i == "ya" && pilihan != 1 {
+		fmt.Println("\n-----------------------Aplikasi Kelola Absensi Pegawai-----------------------")
+		pilihan = menu(pilihan)
+		fmt.Printf("\n")
+		if pilihan == 1 {
+			fmt.Println("Program ditutup")
+		} else if pilihan == 2 {
+			inputpegawai(&banyak)
+		} else if pilihan == 3 {
+			caripegawai(banyak)
+		} else if pilihan == 4 {
+			outputpegawai(banyak)
+		} else if pilihan == 5 {
+			absenpegawai(banyak)
+		} else if pilihan == 6 {
+			historiabsen(banyak)
+		} else if pilihan == 7 {
+			outputreward(banyak)
+		}
+	}
+	fmt.Println("Terimakasih")
+	fmt.Println(" ______________________________________________")
+	fmt.Println("|Nama  : Fahmi Razan Ramdani	NIM : 1301194054|")
+	fmt.Println("|Nama  : Adhan Mulya Rahmawan	NIM : 1301194452|")
+	fmt.Println("-______________________________________________-")
+
+}
+
+func menu(Pilih int) int {
+	fmt.Println("Silahkan pilih menu yang dituju : ")
+	fmt.Println("1. Keluar program")
+	fmt.Println("2. Masukan data pegawai")
+	fmt.Println("3. Cari data pegawai")
+	fmt.Println("4. Tampilkan data pegawai")
+	fmt.Println("5. Masukan data absensi pegawai")
+	fmt.Println("6. Tampilkan histori absensi")
+	fmt.Println("7. Tampilkan nama pegawai pekerja keras")
+	fmt.Print("Pilih : ")
+	fmt.Scan(&Pilih)
+	return Pilih
+}
+
+func inputpegawai(banyak *int) {
+	var i, kode, golongan, umur int
+	var nama, alamat string
+	fmt.Print("Masukan kode: ")
+	fmt.Scan(&kode)
+	fmt.Print("Masukan nama(menggunakan spasi dengan tanda '_'): ")
+	fmt.Scan(&nama)
+	fmt.Print("Masukan golongan: ")
+	fmt.Scan(&golongan)
+	fmt.Print("Masukan umur: ")
+	fmt.Scan(&umur)
+	fmt.Print("Masukan alamat: ")
+	fmt.Scan(&alamat)
+	*banyak = 1
+	for i < A && kode != 00 {
+		data[i].kode = kode
+		data[i].nama = nama
+		data[i].golongan = golongan
+		data[i].umur = umur
+		data[i].alamat = alamat
+		data[i].reward = "null"
+		fmt.Println("Data terinput")
+		fmt.Println("(Untuk menyelesaikan proses input, isi kode dengan '00')")
+		fmt.Printf("\n")
+		fmt.Print("Masukan kode: ")
+		fmt.Scan(&kode)
+		if kode != 00 {
+			fmt.Print("Masukan nama(Menggunakan spasi dengan tanda'_'): ")
+			fmt.Scan(&nama)
+			fmt.Print("Masukan golongan: ")
+			fmt.Scan(&golongan)
+			fmt.Print("Masukan umur: ")
+			fmt.Scan(&umur)
+			fmt.Print("Masukan alamat: ")
+			fmt.Scan(&alamat)
+			*banyak++
+		}
+		i++
+	}
+	fmt.Print("proses input selesai\n")
+	fmt.Println("")
+}
+
+func caridata(banyak int, data array1, kode int) int {
+	i := 0
+	found := false
+	for i < banyak && !found {
+		if data[i].kode == kode {
+			found = true
+			return i
+		}
+		i++
+	}
+	return -1
+}
+
+func caripegawai(banyak int) {
+	var idx, kode int
+	fmt.Println("Cari data pegawai")
+	fmt.Print("Masukan Kode pegawai: ")
+	fmt.Scan(&kode)
+	idx = caridata(banyak, data, kode)
+	if idx == -1 {
+		fmt.Println("Data tidak ada")
+	} else {
+		fmt.Println("Kode Pegawai: ", data[idx].kode)
+		fmt.Println("Nama Pegawai: ", data[idx].nama)
+		fmt.Println("Golongan Pegawai: ", data[idx].golongan)
+		fmt.Println("Umur Pegawai: ", data[idx].umur)
+		fmt.Println("Alamat Pegawai: ", data[idx].alamat)
+		fmt.Println("Reward Pegawai: ", data[idx].reward)
+	}
+	fmt.Printf("\n")
+}
+
+func outputpegawai(banyak int) {
+	i := 0
+	var temp pegawai
+	akhir := 0
+	i = 0
+	awal := 0
+	for awal < banyak-1 {
+		akhir = awal
+		i = awal + 1
+		for i < banyak {
+			if data[i].nama < data[akhir].nama {
+				akhir = i
+			}
+			i++
+		}
+		temp = data[akhir]
+		data[akhir] = data[awal]
+		data[awal] = temp
+		awal++
+	}
+	i = 0
+	fmt.Print("Data pegawai\n")
+	for i < banyak {
+		fmt.Printf("Kode: %v | Nama: %v | Golongan: %v | Umur: %v | Alamat: %v | Reward: %v\n", data[i].kode, data[i].nama, data[i].golongan, data[i].umur, data[i].alamat, data[i].reward)
+		i++
+	}
+}
+
+func absenpegawai(banyak int) {
+	var masuk, keluar, waktu, minit int
+	var j, i, kode int
+	fmt.Print("Masukan kode pegawai: ")
+	fmt.Scan(&kode)
+	fmt.Println("(Masukan jam dan menit tanpa pembatas . maupun ,)")
+	fmt.Println("(Jam kerja ialah jam 0800 - 1600)")
+	fmt.Print("Jam masuk: ")
+	fmt.Scan(&masuk)
+	fmt.Print("Jam keluar: ")
+	fmt.Scan(&keluar)
+	waktu = jam(masuk, keluar)
+	minit = menit(masuk, keluar)
+	i = 0
+	for i < banyak && kode != 00 {
+		j = 0
+		for j < banyak {
+			if kode == data[j].kode {
+				absen[j].masuk = masuk
+				absen[j].keluar = keluar
+				if waktu > 8 || waktu <= -1 && minit >= 0 {
+					absen[j].lembur = "Kerja lembur"
+				} else if waktu < 8 && waktu >= 0 {
+					absen[j].lembur = "Pulang cepat"
+				} else if waktu == 8 && minit == 0 {
+					absen[j].lembur = "Pulang tepat"
+				}
+			}
+			j++
+		}
+		reward(banyak, masuk, keluar)
+		fmt.Println("Data terinput")
+		fmt.Printf("\n")
+		waktu = 0
+		i++
+		fmt.Println("Menghentikan proses input absensi, kode diisi 00")
+		fmt.Print("Masukan kode pegawai: ")
+		fmt.Scan(&kode)
+		if kode != 00 {
+			fmt.Println("(Masukan jam dan menit tanpa pembatas . maupun ,)")
+			fmt.Println("(Jam kerja ialah 0800 - 1600)")
+			fmt.Print("Jam masuk: ")
+			fmt.Scan(&masuk)
+			fmt.Print("Jam keluar: ")
+			fmt.Scan(&keluar)
+			waktu = jam(masuk, keluar)
+			minit = menit(masuk, keluar)
+		}
+	}
+}
+
+func menit(masuk int, keluar int) int {
+	var mmasuk, mkeluar, total int
+	mmasuk = masuk % 100
+	mkeluar = keluar % 100
+	total = (mkeluar - mmasuk)
+	if total < 0 {
+		total = total + 40
+	}
+	return total
+}
+
+func jam(masuk int, keluar int) int {
+	var mmasuk, jmasuk, mkeluar, jkeluar, total int
+	mmasuk = masuk % 100
+	jmasuk = masuk - mmasuk
+	mkeluar = keluar % 100
+	jkeluar = keluar - mkeluar
+	total = (jkeluar - jmasuk) / 100
+	if total == 8 {
+		if mkeluar < mmasuk {
+			total = total - 1
+		}
+	}
+	return total
+}
+
+func reward(banyak int, masuk int, keluar int) {
+	i := 0
+	for i < banyak {
+		if absen[i].masuk == 800 && absen[i].keluar == 1600 {
+			data[i].reward = "Menghargai waktu"
+		} else if absen[i].keluar-absen[i].masuk >= 1300 || absen[i].keluar-absen[i].masuk < 0 {
+			data[i].reward = "Pekerja keras"
+		} else {
+			data[i].reward = ""
+		}
+		i++
+	}
+}
+
+func historiabsen(banyak int) {
+	i := 0
+	kode := 0
+	found := false
+	fmt.Println("Cari histori absensi pegawai")
+	fmt.Print("Kode pegawai: ")
+	fmt.Scan(&kode)
+	for i < banyak && !found {
+		if data[i].kode == kode {
+			found = true
+			fmt.Printf("Kode: %v | Jam masuk: %v | Jam keluar: %v | Status absen: %v\n", data[i].kode, absen[i].masuk, absen[i].keluar, absen[i].lembur)
+		}
+		i++
+	}
+	if kode > i || kode == 0 {
+		fmt.Println("Data tidak ada")
+	}
+	fmt.Printf("\n")
+}
+
+func outputreward(banyak int) {
+	fmt.Print("Nama pegawai pekerja keras:\n")
+	i := 0
+	a := 1
+	for i < banyak {
+		if data[i].reward == "Pekerja keras" {
+			fmt.Printf("%v. %v\n", a, data[i].nama)
+			a++
+		}
+		i++
+	}
+}
