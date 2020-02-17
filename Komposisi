@@ -1,0 +1,40 @@
+/* NIM  : 1301194054
+   Nama :Fahmi Razan Ramdani
+*/
+
+package main
+import "fmt"
+
+
+func fungsiF(a float32) float32 {
+	a=a*a
+	return(a)
+}
+func fungsiG(a float32) float32 {
+	a=a-2
+	return(a)
+}
+func H(a float32) float32 {
+	a=a+1
+	return(a)
+}
+func FoGoH(a float32) float32 {
+	a=((a+1)-2)*((a+1)-2)
+	return(a)
+}
+
+func main() {
+	var(
+		b float32
+	)
+	fmt.Print("Masukan nilai b = ")
+	fmt.Scan(&b)
+	fmt.Println("f", "(", b, ")", "=", fungsiF(b))
+	fmt.Println("g", "(", b, ")", "=", fungsiG(b))
+	fmt.Println("h", "(", b, ")", "=", H(b))
+	fmt.Println("fogoh", "(", b, ")", "=", FoGoH(b))
+	fmt.Println("=============================")
+	fmt.Println("=Nama : Fahmi Razan Ramdani =")
+	fmt.Println("=     NIM : 1301194054      =")
+	fmt.Println("=============================")
+}
